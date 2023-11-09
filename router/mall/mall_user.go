@@ -10,19 +10,17 @@ type MallUserRouter struct {
 }
 
 func (m *MallUserRouter) InitMallUserRouter(Router *gin.RouterGroup) {
-	mallUserRouter := Router.Group("v1").Use(middleware.UserJWTAuth())
-	userRouter := Router.Group("v1")
+	mallUserRouter := Router.Group("users").Use(middleware.LoginAuthenticationMiddleware())
+	userRouter := Router.Group("users")
 	var mallUserApi = v1.ApiGroupApp.MallApiGroup.MallUserApi
 	{
-		mallUserRouter.PUT("/users/info", mallUserApi.UserInfoUpdate)               //修改用户信息
-		mallUserRouter.GET("/users/info", mallUserApi.GetUserInfo)                  //获取用户信息
-		mallUserRouter.POST("/users/logout", mallUserApi.UserLogout)                //登出
-		mallUserRouter.POST("/users/reset_password", mallUserApi.UserResetPassword) //重置密码
+		mallUserRouter.PUT("/info", mallUserApi.UserInfoUpdate)               //修改用户信息
+		mallUserRouter.GET("/info", mallUserApi.GetUserInfo)                  //获取用户信息
+		mallUserRouter.POST("/reset_password", mallUserApi.UserResetPassword) //重置密码
 	}
 	{
-		userRouter.POST("/users/register", mallUserApi.UserRegister) //用户注册
-		userRouter.POST("/users/login", mallUserApi.UserLogin)       //登陆
-
+		userRouter.POST("/register", mallUserApi.UserRegister) //用户注册
+		userRouter.POST("/login", mallUserApi.UserLogin)       //登陆
 	}
 
 }

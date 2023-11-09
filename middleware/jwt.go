@@ -4,64 +4,26 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/model/common/response"
 	"main.go/service"
-	"time"
+	"main.go/utils"
 )
 
 var manageAdminUserTokenService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserTokenService
 var mallUserTokenService = service.ServiceGroupApp.MallServiceGroup.MallUserTokenService
 
-func AdminJWTAuth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.Request.Header.Get("token")
+func LoginAuthenticationMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		token := ctx.GetHeader("Authorization")
 		if token == "" {
-			response.FailWithDetailed(nil, "未登录或非法访问", c)
-			c.Abort()
+			response.FailWithDetailed(nil, "未登录或非法访问", ctx)
+			ctx.Abort()
 			return
 		}
-		err, mallAdminUserToken := manageAdminUserTokenService.ExistAdminToken(token)
-		if err != nil {
-			response.FailWithDetailed(nil, "未登录或非法访问", c)
-			c.Abort()
+
+		if _, ok := utils.VerifyToken(token); !ok {
+			response.FailWithDetailed(nil, "未登录或非法访问", ctx)
+			ctx.Abort()
 			return
 		}
-		if time.Now().After(mallAdminUserToken.ExpireTime) {
-			response.FailWithDetailed(nil, "授权已过期", c)
-			err = manageAdminUserTokenService.DeleteMallAdminUserToken(token)
-			if err != nil {
-				return
-			}
-			c.Abort()
-			return
-		}
-		c.Next()
+		ctx.Next()
 	}
-
-}
-
-func UserJWTAuth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.Request.Header.Get("token")
-		if token == "" {
-			response.UnLogin(nil, c)
-			c.Abort()
-			return
-		}
-		err, mallUserToken := mallUserTokenService.ExistUserToken(token)
-		if err != nil {
-			response.UnLogin(nil, c)
-			c.Abort()
-			return
-		}
-		if time.Now().After(mallUserToken.ExpireTime) {
-			response.FailWithDetailed(nil, "授权已过期", c)
-			err = mallUserTokenService.DeleteMallUserToken(token)
-			if err != nil {
-				return
-			}
-			c.Abort()
-			return
-		}
-		c.Next()
-	}
-
 }

@@ -2,6 +2,7 @@ package mall
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 	"main.go/global"
@@ -10,8 +11,6 @@ import (
 	mallReq "main.go/model/mall/request"
 	mallRes "main.go/model/mall/response"
 	"main.go/utils"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -33,32 +32,22 @@ func (m *MallUserService) RegisterUser(req mallReq.RegisterUserParam) (err error
 
 }
 
-func (m *MallUserService) UpdateUserInfo(token string, req mallReq.UpdateUserInfoParam) (err error) {
-	var userToken mall.MallUserToken
-	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
-	if err != nil {
-		return errors.New("不存在的用户")
-	}
+func (m *MallUserService) UpdateUserInfo(userID string, req mallReq.UpdateUserInfoParam) (err error) {
 	var userInfo mall.MallUser
-	err = global.GVA_DB.Where("user_id =?", userToken.UserId).First(&userInfo).Error
+	err = global.GVA_DB.Where("user_id =?", userID).First(&userInfo).Error
 	// 若密码为空字符，则表明用户不打算修改密码，使用原密码保存
 	if !(req.PasswordMd5 == "") {
 		userInfo.PasswordMd5 = utils.MD5V([]byte(req.PasswordMd5))
 	}
 	userInfo.NickName = req.NickName
 	userInfo.IntroduceSign = req.IntroduceSign
-	err = global.GVA_DB.Where("user_id =?", userToken.UserId).UpdateColumns(&userInfo).Error
+	err = global.GVA_DB.Where("user_id =?", userID).UpdateColumns(&userInfo).Error
 	return
 }
 
-func (m *MallUserService) GetUserDetail(token string) (err error, userDetail mallRes.MallUserDetailResponse) {
-	var userToken mall.MallUserToken
-	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
-	if err != nil {
-		return errors.New("不存在的用户"), userDetail
-	}
+func (m *MallUserService) GetUserDetail(userID string) (err error, userDetail mallRes.MallUserDetailResponse) {
 	var userInfo mall.MallUser
-	err = global.GVA_DB.Where("user_id =?", userToken.UserId).First(&userInfo).Error
+	err = global.GVA_DB.Where("user_id =?", userID).First(&userInfo).Error
 	if err != nil {
 		return errors.New("用户信息获取失败"), userDetail
 	}
@@ -66,43 +55,21 @@ func (m *MallUserService) GetUserDetail(token string) (err error, userDetail mal
 	return
 }
 
-func (m *MallUserService) UserLogin(params mallReq.UserLoginParam) (err error, user mall.MallUser, userToken mall.MallUserToken) {
+func (m *MallUserService) UserLogin(params mallReq.UserLoginParam) (err error, userToken string) {
+	var user mall.MallUser
 	err = global.GVA_DB.Where("login_name=? AND password_md5=?", params.UserName, params.Password).First(&user).Error
 	if user != (mall.MallUser{}) {
-		token := getNewToken(time.Now().UnixNano()/1e6, int(user.UserId))
-		global.GVA_DB.Where("user_id", user.UserId).First(&token)
-		nowDate := time.Now()
-		// 48小时过期
-		expireTime, _ := time.ParseDuration("48h")
-		expireDate := nowDate.Add(expireTime)
-		// 没有token新增，有token 则更新
-		if userToken == (mall.MallUserToken{}) {
-			userToken.UserId = user.UserId
-			userToken.Token = token
-			userToken.UpdateTime = nowDate
-			userToken.ExpireTime = expireDate
-			if err = global.GVA_DB.Save(&userToken).Error; err != nil {
-				return
-			}
-		} else {
-			userToken.Token = token
-			userToken.UpdateTime = nowDate
-			userToken.ExpireTime = expireDate
-			if err = global.GVA_DB.Save(&userToken).Error; err != nil {
-				return
-			}
+		userToken, err = utils.CreateToken(params.UserName, time.Hour*24)
+		if err != nil {
+			fmt.Println(user, err)
+			return err, ""
 		}
 	}
-	return err, user, userToken
+	return
 }
-func (m *MallUserService) UserResetPassword(token string, params mallReq.UserResetPasswordParam) (err error) {
-	var userToken mall.MallUserToken
-	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
-	if err != nil {
-		return errors.New("不存在的用户")
-	}
+func (m *MallUserService) UserResetPassword(userID string, params mallReq.UserResetPasswordParam) (err error) {
 	var userInfo mall.MallUser
-	err = global.GVA_DB.Where("user_id =?", userToken.UserId).First(&userInfo).Error
+	err = global.GVA_DB.Where("user_id =?", userID).First(&userInfo).Error
 	if err != nil {
 		return errors.New("查找用户信息失败")
 	}
@@ -111,14 +78,6 @@ func (m *MallUserService) UserResetPassword(token string, params mallReq.UserRes
 		userInfo.PasswordMd5 = utils.MD5V([]byte(params.Password))
 	}
 	userInfo.Email = params.Email
-	err = global.GVA_DB.Where("user_id =?", userToken.UserId).UpdateColumns(&userInfo).Error
+	err = global.GVA_DB.Where("user_id =?", userID).UpdateColumns(&userInfo).Error
 	return
-}
-
-func getNewToken(timeInt int64, userId int) (token string) {
-	var build strings.Builder
-	build.WriteString(strconv.FormatInt(timeInt, 10))
-	build.WriteString(strconv.Itoa(userId))
-	build.WriteString(utils.GenValidateCode(6))
-	return utils.MD5V([]byte(build.String()))
 }

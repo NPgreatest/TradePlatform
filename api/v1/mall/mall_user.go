@@ -26,55 +26,44 @@ func (m *MallUserApi) UserRegister(c *gin.Context) {
 	response.OkWithMessage("创建成功", c)
 }
 
-func (m *MallUserApi) UserInfoUpdate(c *gin.Context) {
+func (m *MallUserApi) UserInfoUpdate(ctx *gin.Context) {
 	var req mallReq.UpdateUserInfoParam
-	_ = c.ShouldBindJSON(&req)
-	//fmt.Println(req)
-	token := c.GetHeader("token")
-	if err := mallUserService.UpdateUserInfo(token, req); err != nil {
+	_ = ctx.ShouldBindJSON(&req)
+	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
+	if err := mallUserService.UpdateUserInfo(userID, req); err != nil {
 		global.GVA_LOG.Error("更新用户信息失败", zap.Error(err))
-		response.FailWithMessage("更新用户信息失败"+err.Error(), c)
+		response.FailWithMessage("更新用户信息失败"+err.Error(), ctx)
 	}
-	response.OkWithMessage("更新成功", c)
+	response.OkWithMessage("更新成功", ctx)
 }
 
-func (m *MallUserApi) GetUserInfo(c *gin.Context) {
-	token := c.GetHeader("token")
-	if err, userDetail := mallUserService.GetUserDetail(token); err != nil {
+func (m *MallUserApi) GetUserInfo(ctx *gin.Context) {
+	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
+	if err, userDetail := mallUserService.GetUserDetail(userID); err != nil {
 		global.GVA_LOG.Error("未查询到记录", zap.Error(err))
-		response.FailWithMessage("未查询到记录", c)
+		response.FailWithMessage("未查询到记录", ctx)
 	} else {
-		response.OkWithData(userDetail, c)
+		response.OkWithData(userDetail, ctx)
 	}
 }
 
-func (m *MallUserApi) UserLogin(c *gin.Context) {
+func (m *MallUserApi) UserLogin(ctx *gin.Context) {
 	var req mallReq.UserLoginParam
-	_ = c.ShouldBindJSON(&req)
-	if err, _, adminToken := mallUserService.UserLogin(req); err != nil {
-		response.FailWithMessage("登陆失败", c)
+	_ = ctx.ShouldBindJSON(&req)
+	if err, userToken := mallUserService.UserLogin(req); err != nil {
+		response.FailWithMessage("登陆失败", ctx)
 	} else {
-		response.OkWithData(adminToken.Token, c)
+		response.OkWithData(userToken, ctx)
 	}
 }
 
 func (m *MallUserApi) UserResetPassword(ctx *gin.Context) {
 	var req mallReq.UserResetPasswordParam
 	_ = ctx.ShouldBindJSON(&req)
-	token := ctx.GetHeader("token")
-	if err := mallUserService.UserResetPassword(token, req); err != nil {
+	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
+	if err := mallUserService.UserResetPassword(userID, req); err != nil {
 		response.FailWithMessage("更新密码失败", ctx)
 	} else {
 		response.OkWithMessage("更新密码成功", ctx)
 	}
-}
-
-func (m *MallUserApi) UserLogout(c *gin.Context) {
-	token := c.GetHeader("token")
-	if err := mallUserTokenService.DeleteMallUserToken(token); err != nil {
-		response.FailWithMessage("登出失败", c)
-	} else {
-		response.OkWithMessage("登出成功", c)
-	}
-
 }

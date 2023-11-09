@@ -10,4 +10,5 @@ type MallServiceGroup struct {
 	MallUserAddressService
 	MallShopCartService
 	MallOrderService
+	MallFavouriteService
 }
