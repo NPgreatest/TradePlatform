@@ -1,0 +1,1 @@
+mysql -h localhost -uroot -proot < /create.sql

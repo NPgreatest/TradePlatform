@@ -1,0 +1,40 @@
+version: "3"
+services:
+  web:
+    build: .
+    restart: always
+    networks:
+      webapp:
+    ports:
+      - "8888:8888"
+    depends_on:
+      - mysql
+    volumes:
+      - ./static:/app/static
+  mysql:
+    build: ./sql
+    container_name: godockerDB
+    restart: always
+    networks:
+      webapp:
+    ports:
+      - "3307:3306"
+  nginx:
+    image: nginx
+    container_name: test-nginx
+    restart: always
+    networks:
+      webapp:
+    ports:
+      - "80:80"
+    volumes:
+      - ./vue/dist/:/usr/share/nginx/html/
+      - ./vue/dist2/:/usr/share/nginx/html2/
+      - ./vue/nginx.conf:/etc/nginx/nginx.conf
+#      - ./vue/conf.d:/etc/nginx/conf.d
+
+#      - ./vue/images/:/usr/share/nginx/images/
+    privileged: true
+networks:
+  webapp:
+    driver: "bridge"
