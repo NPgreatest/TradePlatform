@@ -13,7 +13,8 @@ func (m *MallGoodsInfoIndexRouter) InitMallGoodsInfoIndexRouter(Router *gin.Rout
 	mallGoodsRouter := Router.Group("v1")
 	var mallGoodsInfoApi = v1.ApiGroupApp.MallApiGroup.MallGoodsInfoApi
 	{
-		mallGoodsRouter.GET("/search", mallGoodsInfoApi.GoodsSearch)                           // 商品搜索
-		mallGoodsRouter.GET("/detail", middleware.AuthPermit(1), mallGoodsInfoApi.GoodsDetail) //商品详情
+		mallGoodsRouter.GET("/search", mallGoodsInfoApi.GoodsSearch)                               // 商品搜索
+		mallGoodsRouter.GET("/detail", middleware.AuthPermit(1), mallGoodsInfoApi.GoodsDetail)     //商品详情
+		mallGoodsRouter.GET("/forecast", middleware.AuthPermit(2), mallGoodsInfoApi.GoodsForecast) //商品详情
 	}
 }

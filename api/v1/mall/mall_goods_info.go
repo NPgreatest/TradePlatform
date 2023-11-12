@@ -41,3 +41,14 @@ func (m *MallGoodsInfoApi) GoodsDetail(c *gin.Context) {
 	}
 	response.OkWithData(goodsInfo, c)
 }
+
+func (m *MallGoodsInfoApi) GoodsForecast(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Query("id"))
+	err, goodsInfo := mallGoodsInfoService.GetMallGoodsForeCast(id)
+	if err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败"+err.Error(), c)
+		return
+	}
+	response.OkWithData(goodsInfo, c)
+}

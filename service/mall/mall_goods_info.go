@@ -57,3 +57,11 @@ func (m *MallGoodsInfoService) GetMallGoodsInfo(id int) (err error, res manage.H
 	res = mallGoodsInfo
 	return
 }
+
+// GetMallGoodsInfo 获取商品信息
+func (m *MallGoodsInfoService) GetMallGoodsForeCast(id int) (err error, res manage.HouseForeCast) {
+	var mallGoodsInfo manage.HouseForeCast
+	err = global.GVA_DB.Where("validation_code = ?", id).First(&mallGoodsInfo).Error
+	res = mallGoodsInfo
+	return
+}
