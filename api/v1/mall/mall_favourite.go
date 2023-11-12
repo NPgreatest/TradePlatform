@@ -32,6 +32,7 @@ func (m *MallFavouriteApi) AddFavourite(ctx *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("添加失败!", zap.Error(err))
 		response.FailWithMessage("添加失败"+err.Error(), ctx)
+		return
 	}
 	response.Ok(ctx)
 }

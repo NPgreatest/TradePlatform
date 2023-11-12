@@ -4,7 +4,6 @@ import (
 	"main.go/global"
 	mallRes "main.go/model/mall/response"
 	"main.go/model/manage"
-	"main.go/utils"
 )
 
 type MallGoodsInfoService struct {
@@ -41,8 +40,8 @@ func (m *MallGoodsInfoService) MallGoodsListBySearch(pageSize int, pageNumber in
 	for _, goods := range goodsList {
 		searchGoods := mallRes.GoodsSearchResponse{
 			ValidationCode: goods.ValidationCode,
-			Title:          utils.SubStrLen(goods.Title, 28),
-			SellingPoint:   utils.SubStrLen(goods.SellingPoint, 28),
+			Title:          goods.Title,
+			SellingPoint:   goods.SellingPoint,
 			Picture:        goods.Picture,
 			SellingPrice:   goods.TotalPrice,
 		}

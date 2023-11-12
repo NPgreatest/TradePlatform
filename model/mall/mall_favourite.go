@@ -3,9 +3,9 @@ package mall
 import "main.go/model/common"
 
 type FavouriteItem struct {
-	UserId     int             `json:"user_id" form:"userId" gorm:"column:user_id;comment:用户主键id;type:bigint"`
-	GoodsId    int             `json:"goodsId" form:"goodsId" gorm:"column:goods_id;comment:关联商品id;type:bigint"`
-	CreateTime common.JSONTime `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:datetime"`
+	UserId         int             `json:"user_id" form:"userId" gorm:"column:user_id;comment:用户主键id;type:bigint"`
+	ValidationCode int64           `json:"validation_code" gorm:"primarykey;column:validation_code;comment:房源核验码，作为主键"`
+	CreateTime     common.JSONTime `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:datetime"`
 }
 
 // TableName MallUser 表名

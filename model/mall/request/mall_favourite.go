@@ -1,5 +1,5 @@
 package request
 
 type AddFavouriteParams struct {
-	GoodsId int `json:"goodsId"`
+	ValidationCode int64 `json:"validation_code" `
 }

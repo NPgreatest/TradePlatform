@@ -8,7 +8,7 @@ import (
 type HouseInfo struct {
 	ValidationCode   int64           `json:"validation_code" gorm:"primarykey;column:validation_code;comment:房源核验码，作为主键"`
 	CategoryId       int64           `json:"categoryId" gorm:"column:category_id;comment:用于标识分类信息的字段"`
-	Title            string          `json:"title" gorm:"column:title;comment:标题;type:varchar(255)"`
+	Title            string          `json:"title" gorm:"column:title;comment:标题;type:text"`
 	Picture          string          `json:"picture" gorm:"column:picture;comment:图片地址;type:varchar(255)"`
 	TotalPrice       float64         `json:"totalPrice" gorm:"column:total_price;comment:总价;type:double"`
 	UnitPrice        float64         `json:"unitPrice" gorm:"column:unit_price;comment:均价;type:double"`

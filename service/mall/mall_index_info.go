@@ -4,7 +4,6 @@ import (
 	"main.go/global"
 	"main.go/model/mall/response"
 	"main.go/model/manage"
-	"main.go/utils"
 )
 
 type MallIndexInfoService struct {
@@ -30,8 +29,8 @@ func (m *MallIndexInfoService) GetConfigGoodsForIndex(configType int, num int) (
 	for _, indexGoods := range goodsList {
 		res := response.MallIndexConfigGoodsResponse{
 			ValidationCode: indexGoods.ValidationCode,
-			Title:          utils.SubStrLen(indexGoods.Title, 30),
-			Purpose:        utils.SubStrLen(indexGoods.Purpose, 30),
+			Title:          indexGoods.Title,
+			Purpose:        indexGoods.Purpose,
 			Picture:        indexGoods.Picture,
 			TotalPrice:     indexGoods.TotalPrice,
 			Community:      indexGoods.Community,

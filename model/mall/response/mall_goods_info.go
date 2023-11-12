@@ -1,9 +1,9 @@
 package response
 
 type GoodsSearchResponse struct {
-	ValidationCode int64   `json:"goodsId"`
-	Title          string  `json:"goodsName"`
-	SellingPoint   string  `json:"goodsIntro"`
-	Picture        string  `json:"goodsCoverImg"`
-	SellingPrice   float64 `json:"sellingPrice"`
+	ValidationCode int64   `json:"validation_code"`
+	Title          string  `json:"title"`
+	SellingPoint   string  `json:"selling_point"`
+	Picture        string  `json:"picture"`
+	SellingPrice   float64 `json:"selling_price"`
 }
