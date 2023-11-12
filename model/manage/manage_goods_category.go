@@ -4,8 +4,8 @@ import (
 	"main.go/model/common"
 )
 
-type MallGoodsCategory struct {
-	CategoryId    int             `json:"categoryId"gorm:"primarykey;AUTO_INCREMENT"`
+type HouseCategory struct {
+	CategoryId    int             `json:"categoryId"gorm:"column:category_id;"`
 	CategoryLevel int             `json:"categoryLevel" gorm:"comment:分类等级"`
 	ParentId      int             `json:"parentId" gorm:"comment:父类id"`
 	CategoryName  string          `json:"categoryName" gorm:"comment:分类名称"`
@@ -15,6 +15,6 @@ type MallGoodsCategory struct {
 	UpdateTime    common.JSONTime `json:"updateTime" gorm:"column:update_time;comment:修改时间;type:datetime"` // 更新时间
 }
 
-func (MallGoodsCategory) TableName() string {
-	return "oneforallmall_goods_category"
+func (HouseCategory) TableName() string {
+	return "plat_house_category"
 }

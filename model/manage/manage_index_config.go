@@ -5,9 +5,9 @@ import (
 	"main.go/model/common"
 )
 
-// MallIndexConfig 结构体
+// HouseIndexConfig 结构体
 // 如果含有time.Time 请自行import time包
-type MallIndexConfig struct {
+type HouseIndexConfig struct {
 	ConfigId    int             `json:"configId" form:"configId" gorm:"primarykey;AUTO_INCREMENT"`
 	ConfigName  string          `json:"configName" form:"configName" gorm:"column:config_name;comment:显示字符(配置搜索时不可为空，其他可为空);type:varchar(50);"`
 	ConfigType  int             `json:"configType" form:"configType" gorm:"column:config_type;comment:1-搜索框热搜 2-搜索下拉框热搜 3-(首页)热销商品 4-(首页)新品上线 5-(首页)为你推荐;type:tinyint"`
@@ -21,7 +21,7 @@ type MallIndexConfig struct {
 	UpdateUser  int             `json:"updateUser" form:"updateUser" gorm:"column:update_user;comment:修改者id;type:int"`
 }
 
-// TableName MallIndexConfig 表名
-func (MallIndexConfig) TableName() string {
-	return "oneforallmall_index_config"
+// TableName HouseIndexConfig 表名
+func (HouseIndexConfig) TableName() string {
+	return "plat_index_config"
 }

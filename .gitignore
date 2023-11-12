@@ -6,7 +6,7 @@
 *.dylib
 log
 go.sum
-package-lock.json
+
 
 # Test binary, built with `go test -c`
 *.test

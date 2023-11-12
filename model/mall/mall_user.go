@@ -4,8 +4,8 @@ import (
 	"main.go/model/common"
 )
 
-type MallUser struct {
-	UserId        int             `json:"userId" form:"userId" gorm:"primarykey;AUTO_INCREMENT"`
+type User struct {
+	UserId        int             `json:"user_id" form:"user_id" gorm:"primarykey;AUTO_INCREMENT;type:bigint"`
 	NickName      string          `json:"nickName" form:"nickName" gorm:"column:nick_name;comment:用户昵称;type:varchar(50);"`
 	Email         string          `json:"email" form:"email" gorm:"column:email;comment:用户邮箱;type:varchar(50);"`
 	LoginName     string          `json:"loginName" form:"loginName" gorm:"column:login_name;comment:登陆名称(默认为手机号);type:varchar(11);"`
@@ -17,6 +17,6 @@ type MallUser struct {
 }
 
 // TableName MallUser 表名
-func (MallUser) TableName() string {
-	return "oneforallmall_user"
+func (User) TableName() string {
+	return "plat_users"
 }

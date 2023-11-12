@@ -1,6 +1,6 @@
 package response
 
-//首页分类数据VO(第三级)
+// 首页分类数据VO(第三级)
 type ThirdLevelCategoryVO struct {
 	CategoryId    int    `json:"categoryId"`
 	CategoryLevel int    `json:"categoryLevel"`

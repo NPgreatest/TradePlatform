@@ -18,6 +18,6 @@ type Mysql struct {
 func (m *Mysql) Dsn() string {
 	//部署的时候用这个
 	fmt.Println(m.Username + ":" + m.Password + "@tcp(godockerDB:3306)/" + m.Dbname + "?" + m.Config)
-	return m.Username + ":" + m.Password + "@tcp(godockerDB)/" + m.Dbname + "?" + m.Config
-	//return m.Username + ":" + m.Password + "@tcp(" + m.Path + ":" + m.Port + ")/" + m.Dbname + "?" + m.Config
+	//return m.Username + ":" + m.Password + "@tcp(godockerDB)/" + m.Dbname + "?" + m.Config
+	return m.Username + ":" + m.Password + "@tcp(" + m.Path + ":" + m.Port + ")/" + m.Dbname + "?" + m.Config
 }

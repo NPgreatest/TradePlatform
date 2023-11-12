@@ -5,7 +5,7 @@ import (
 )
 
 // 轮播图
-type MallCarousel struct {
+type Carousel struct {
 	CarouselId   int             `json:"carouselId" form:"carouselId" gorm:"primarykey;AUTO_INCREMENT"`
 	CarouselUrl  string          `json:"carouselUrl" form:"carouselUrl" gorm:"column:carousel_url;comment:轮播图;type:varchar(100);"`
 	RedirectUrl  string          `json:"redirectUrl" form:"redirectUrl" gorm:"column:redirect_url;comment:点击后的跳转地址(默认不跳转);type:varchar(100);"`
@@ -17,7 +17,7 @@ type MallCarousel struct {
 	UpdateUser   int             `json:"updateUser" form:"updateUser" gorm:"column:update_user;comment:修改者id;type:int"`
 }
 
-// TableName MallCarousel 表名
-func (MallCarousel) TableName() string {
-	return "oneforallmall_carousel"
+// TableName Carousel 表名
+func (Carousel) TableName() string {
+	return "plat_carousel"
 }

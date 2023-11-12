@@ -3,12 +3,8 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/model/common/response"
-	"main.go/service"
 	"main.go/utils"
 )
-
-var manageAdminUserTokenService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserTokenService
-var mallUserTokenService = service.ServiceGroupApp.MallServiceGroup.MallUserTokenService
 
 func LoginAuthenticationMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {

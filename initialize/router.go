@@ -18,7 +18,7 @@ func Routers() *gin.Engine {
 	// 方便统一添加路由组前缀 多服务器上线使用
 	//商城后管路由
 	manageRouter := router.RouterGroupApp.Manage
-	ManageGroup := Router.Group("api-admin")
+	ManageGroup := Router.Group("manage-api")
 	PublicGroup := Router.Group("")
 
 	{
@@ -30,11 +30,6 @@ func Routers() *gin.Engine {
 	{
 		//商城后管路由初始化
 		manageRouter.InitManageAdminUserRouter(ManageGroup)
-		manageRouter.InitManageGoodsCategoryRouter(ManageGroup)
-		manageRouter.InitManageGoodsInfoRouter(ManageGroup)
-		manageRouter.InitManageCarouselRouter(ManageGroup)
-		manageRouter.InitManageIndexConfigRouter(ManageGroup)
-		manageRouter.InitManageOrderRouter(ManageGroup)
 	}
 	//商城前端路由
 	mallRouter := router.RouterGroupApp.Mall
@@ -45,7 +40,6 @@ func Routers() *gin.Engine {
 		mallRouter.InitMallGoodsInfoIndexRouter(MallGroup)
 		mallRouter.InitMallGoodsCategoryIndexRouter(MallGroup)
 		mallRouter.InitMallUserRouter(MallGroup)
-		mallRouter.InitMallFavouriteRouter(MallGroup)
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router

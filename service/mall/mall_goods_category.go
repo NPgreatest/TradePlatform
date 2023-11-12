@@ -31,9 +31,9 @@ func (m *MallGoodsCategoryService) GetCategoriesForIndex() (err error, newBeeMal
 			_, thirdLevelCategories := selectByLevelAndParentIdsAndNumber(secondLevelCategoryIds, enum.LevelThree.Code(), 0)
 			if thirdLevelCategories != nil {
 				//根据 parentId 将 thirdLevelCategories 分组
-				thirdLevelCategoryMap := make(map[int][]manage.MallGoodsCategory)
+				thirdLevelCategoryMap := make(map[int][]manage.HouseCategory)
 				for _, thirdLevelCategory := range thirdLevelCategories {
-					thirdLevelCategoryMap[thirdLevelCategory.ParentId] = []manage.MallGoodsCategory{}
+					thirdLevelCategoryMap[thirdLevelCategory.ParentId] = []manage.HouseCategory{}
 				}
 				for k, v := range thirdLevelCategoryMap {
 					for _, third := range thirdLevelCategories {
@@ -95,7 +95,7 @@ func (m *MallGoodsCategoryService) GetCategoriesForIndex() (err error, newBeeMal
 }
 
 // 获取分类数据
-func selectByLevelAndParentIdsAndNumber(ids []int, level int, limit int) (err error, categories []manage.MallGoodsCategory) {
+func selectByLevelAndParentIdsAndNumber(ids []int, level int, limit int) (err error, categories []manage.HouseCategory) {
 
 	global.GVA_DB.Where("parent_id in ? and category_level =? and is_deleted = 0", ids, level).
 		Order("category_rank desc").Limit(limit).Find(&categories)

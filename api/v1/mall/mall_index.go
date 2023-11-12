@@ -13,7 +13,7 @@ type MallIndexApi struct {
 
 // MallIndexInfo 加载首页信息
 func (m *MallIndexApi) MallIndexInfo(c *gin.Context) {
-	err, _, mallCarouseInfo := mallCarouselService.GetCarouselsForIndex(5)
+	err, _, mallCarouseInfo := mallCarouselService.GetCarouselsForIndex(enum.IndexSearchHots.Code())
 	if err != nil {
 		global.GVA_LOG.Error("轮播图获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("轮播图获取失败", c)

@@ -2,10 +2,10 @@ package request
 
 import (
 	"main.go/model/common/request"
-	"main.go/model/manage"
+	"main.go/model/mall"
 )
 
 type MallUserSearch struct {
-	manage.MallUser
+	mall.User
 	request.PageInfo
 }

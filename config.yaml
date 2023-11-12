@@ -5,7 +5,7 @@ mysql:
   path: 127.0.0.1
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: mall
+  db-name: plat_second_house
   username: root
   password: root
   max-idle-conns: 0
@@ -22,7 +22,7 @@ system:
 zap:
   level: info
   format: console
-  prefix: '[OneForAll_mall]'
+  prefix: '[plat_second_house]'
   director: log
   showLine: true
   encode-level: LowercaseColorLevelEncoder

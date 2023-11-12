@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"main.go/core"
 	"main.go/global"
@@ -22,7 +23,7 @@ func main() {
 	for i := 1; i <= maxAttempts; i++ {
 		global.GVA_DB, err = initialize.Gorm() // gorm连接数据库
 		if err == nil {
-			log.Printf("Successfully connected to MySQL!")
+			fmt.Println("Successfully connected to MySQL!")
 			break
 		} else {
 			log.Printf("Failed to connect to MySQL (attempt %d/%d): %v\n", i, maxAttempts, err)

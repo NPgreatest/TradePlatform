@@ -9,10 +9,10 @@ import (
 	"main.go/utils"
 )
 
-type MallUserApi struct {
+type UserApi struct {
 }
 
-func (m *MallUserApi) UserRegister(c *gin.Context) {
+func (m *UserApi) UserRegister(c *gin.Context) {
 	var req mallReq.RegisterUserParam
 	_ = c.ShouldBindJSON(&req)
 	if err := utils.Verify(req, utils.MallUserRegisterVerify); err != nil {
@@ -26,7 +26,7 @@ func (m *MallUserApi) UserRegister(c *gin.Context) {
 	response.OkWithMessage("创建成功", c)
 }
 
-func (m *MallUserApi) UserInfoUpdate(ctx *gin.Context) {
+func (m *UserApi) UserInfoUpdate(ctx *gin.Context) {
 	var req mallReq.UpdateUserInfoParam
 	_ = ctx.ShouldBindJSON(&req)
 	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
@@ -37,7 +37,7 @@ func (m *MallUserApi) UserInfoUpdate(ctx *gin.Context) {
 	response.OkWithMessage("更新成功", ctx)
 }
 
-func (m *MallUserApi) GetUserInfo(ctx *gin.Context) {
+func (m *UserApi) GetUserInfo(ctx *gin.Context) {
 	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
 	if err, userDetail := mallUserService.GetUserDetail(userID); err != nil {
 		global.GVA_LOG.Error("未查询到记录", zap.Error(err))
@@ -47,7 +47,7 @@ func (m *MallUserApi) GetUserInfo(ctx *gin.Context) {
 	}
 }
 
-func (m *MallUserApi) UserLogin(ctx *gin.Context) {
+func (m *UserApi) UserLogin(ctx *gin.Context) {
 	var req mallReq.UserLoginParam
 	_ = ctx.ShouldBindJSON(&req)
 	if err, userToken := mallUserService.UserLogin(req); err != nil {
@@ -57,7 +57,7 @@ func (m *MallUserApi) UserLogin(ctx *gin.Context) {
 	}
 }
 
-func (m *MallUserApi) UserResetPassword(ctx *gin.Context) {
+func (m *UserApi) UserResetPassword(ctx *gin.Context) {
 	var req mallReq.UserResetPasswordParam
 	_ = ctx.ShouldBindJSON(&req)
 	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
@@ -65,5 +65,14 @@ func (m *MallUserApi) UserResetPassword(ctx *gin.Context) {
 		response.FailWithMessage("更新密码失败", ctx)
 	} else {
 		response.OkWithMessage("更新密码成功", ctx)
+	}
+}
+
+func (m *UserApi) PermissionList(ctx *gin.Context) {
+	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
+	if list, err := mallUserService.PermissionList(userID); err != nil {
+		response.FailWithMessage("获取权限失败", ctx)
+	} else {
+		response.OkWithData(list, ctx)
 	}
 }

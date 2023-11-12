@@ -12,6 +12,6 @@ func (m *MallCarouselIndexRouter) InitMallCarouselIndexRouter(Router *gin.Router
 	mallCarouselRouter := Router.Group("v1")
 	var mallCarouselApi = v1.ApiGroupApp.MallApiGroup.MallIndexApi
 	{
-		mallCarouselRouter.GET("index-infos", mallCarouselApi.MallIndexInfo) // 获取首页数据
+		mallCarouselRouter.GET("recommend", mallCarouselApi.MallIndexInfo) // 获取首页数据
 	}
 }
