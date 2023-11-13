@@ -15,8 +15,9 @@ func (m *MallUserRouter) InitMallUserRouter(Router *gin.RouterGroup) {
 	var mallUserApi = v1.ApiGroupApp.MallApiGroup.UserApi
 	var mallFavouiteApi = v1.ApiGroupApp.MallApiGroup.MallFavouriteApi
 	{
-		mallUserRouter.POST("/user/info", mallUserApi.UserInfoUpdate)        //修改用户信息
-		mallUserRouter.GET("/user/info", mallUserApi.GetUserInfo)            //获取用户信息
+		mallUserRouter.POST("/user/info", mallUserApi.UserInfoUpdate) //修改用户信息
+		mallUserRouter.GET("/user/info", mallUserApi.GetUserInfo)     //获取用户信息
+		mallUserRouter.POST("user/reset", mallUserApi.UserResetPassword)
 		mallUserRouter.GET("/user/permission", mallUserApi.PermissionList)   //获取用户权限列表
 		mallUserRouter.POST("user/favourite", mallFavouiteApi.AddFavourite)  //添加喜欢的房子
 		mallUserRouter.GET("user/favourite", mallFavouiteApi.GetMyFavourite) //获取喜欢的房子
