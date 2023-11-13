@@ -6,20 +6,32 @@ import (
 	"main.go/model/common"
 	"main.go/model/mall"
 	mallReq "main.go/model/mall/request"
+	mallRes "main.go/model/mall/response"
+	"main.go/model/manage"
 	"time"
 )
 
 type MallFavouriteService struct {
 }
 
-// RegisterUser 注册用户
-func (m *MallFavouriteService) GetMyFavourite(userID string) (err error, res []mall.FavouriteItem) {
+// GetMyFavourite 查看我喜欢的列表
+func (m *MallFavouriteService) GetMyFavourite(userID string) (err error, res []mallRes.FavouriteResponse) {
 	var userInfo mall.User
 	err = global.GVA_DB.Where("login_name =?", userID).First(&userInfo).Error
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Where("user_id = ?", userInfo.UserId).Find(&res).Error
+	var favourite []mall.FavouriteItem
+	err = global.GVA_DB.Where("user_id = ?", userInfo.UserId).Find(&favourite).Error
+	for _, v := range favourite {
+		var houseItem manage.HouseInfo
+		err = global.GVA_DB.Where("validation_code = ?", v.ValidationCode).First(&houseItem).Error
+		if err != nil {
+			continue
+		}
+		res = append(res, mallRes.FavouriteResponse{ValidationCode: v.ValidationCode, Title: houseItem.Title, Picture: houseItem.Picture, TotalPrice: houseItem.TotalPrice,
+			Community: houseItem.Community, Purpose: houseItem.Purpose, CreateTime: v.CreateTime})
+	}
 	return err, res
 
 }
