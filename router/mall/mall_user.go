@@ -17,12 +17,13 @@ func (m *MallUserRouter) InitMallUserRouter(Router *gin.RouterGroup) {
 	{
 		mallUserRouter.POST("/user/info", mallUserApi.UserInfoUpdate) //修改用户信息
 		mallUserRouter.GET("/user/info", mallUserApi.GetUserInfo)     //获取用户信息
-		mallUserRouter.POST("user/reset", mallUserApi.UserResetPassword)
+
 		mallUserRouter.GET("/user/permission", mallUserApi.PermissionList)   //获取用户权限列表
 		mallUserRouter.POST("user/favourite", mallFavouiteApi.AddFavourite)  //添加喜欢的房子
 		mallUserRouter.GET("user/favourite", mallFavouiteApi.GetMyFavourite) //获取喜欢的房子
 	}
 	{
+		userRouter.POST("user/reset", mallUserApi.UserResetPassword)
 		userRouter.POST("/user/register", mallUserApi.UserRegister) //用户注册
 		userRouter.POST("/user/login", mallUserApi.UserLogin)       //登陆
 	}

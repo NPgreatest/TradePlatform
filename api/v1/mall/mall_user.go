@@ -63,8 +63,7 @@ func (m *UserApi) UserLogin(ctx *gin.Context) {
 func (m *UserApi) UserResetPassword(ctx *gin.Context) {
 	var req mallReq.UserResetPasswordParam
 	_ = ctx.ShouldBindJSON(&req)
-	userID, _ := utils.VerifyToken(ctx.GetHeader("Authorization"))
-	if err := mallUserService.UserResetPassword(userID, req); err != nil {
+	if err := mallUserService.UserResetPassword(req); err != nil {
 		response.FailWithMessage("更新密码失败", ctx)
 	} else {
 		response.OkWithMessage("更新密码成功", ctx)

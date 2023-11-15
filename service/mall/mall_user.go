@@ -71,9 +71,9 @@ func (m *MallUserService) UserLogin(params mallReq.UserLoginParam) (err error, u
 	}
 	return
 }
-func (m *MallUserService) UserResetPassword(userID string, params mallReq.UserResetPasswordParam) (err error) {
+func (m *MallUserService) UserResetPassword(params mallReq.UserResetPasswordParam) (err error) {
 	var userInfo mall.User
-	err = global.GVA_DB.Where("login_name =?", userID).First(&userInfo).Error
+	err = global.GVA_DB.Where("email =?", params.Email).First(&userInfo).Error
 	if err != nil {
 		return errors.New("查找用户信息失败")
 	}
@@ -82,7 +82,7 @@ func (m *MallUserService) UserResetPassword(userID string, params mallReq.UserRe
 		userInfo.PasswordMd5 = utils.MD5V([]byte(params.Password))
 	}
 	userInfo.Email = params.Email
-	err = global.GVA_DB.Where("login_name =?", userID).UpdateColumns(&userInfo).Error
+	err = global.GVA_DB.Where("login_name =?", userInfo.LoginName).UpdateColumns(&userInfo).Error
 	return
 }
 func (m *MallUserService) PermissionList(userID string) (list []int, err error) {
