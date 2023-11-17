@@ -44,6 +44,9 @@ func (m *MallGoodsInfoService) MallGoodsListBySearch(pageSize int, pageNumber in
 			SellingPoint:   goods.SellingPoint,
 			Picture:        goods.Picture,
 			SellingPrice:   goods.TotalPrice,
+			HangTime:       goods.HangTime,
+			Location:       goods.Location,
+			Community:      goods.Community,
 		}
 		searchGoodsList = append(searchGoodsList, searchGoods)
 	}

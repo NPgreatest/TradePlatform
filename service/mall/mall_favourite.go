@@ -30,7 +30,8 @@ func (m *MallFavouriteService) GetMyFavourite(userID string) (err error, res []m
 			continue
 		}
 		res = append(res, mallRes.FavouriteResponse{ValidationCode: v.ValidationCode, Title: houseItem.Title, Picture: houseItem.Picture, TotalPrice: houseItem.TotalPrice,
-			Community: houseItem.Community, Purpose: houseItem.Purpose, CreateTime: v.CreateTime})
+			Community: houseItem.Community, Purpose: houseItem.Purpose, CreateTime: v.CreateTime,
+			HangTime: houseItem.HangTime, Location: houseItem.Location})
 	}
 	return err, res
 

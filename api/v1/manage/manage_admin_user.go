@@ -16,6 +16,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type ManageAdminUserApi struct {
@@ -155,8 +156,8 @@ func (m *ManageAdminUserApi) ImportDataFromJson(c *gin.Context) {
 		rawData.InArea = utils.RemoveNonNumeric(rawData.InArea)
 		rawData.UnitPrice = utils.RemoveNonNumeric(rawData.UnitPrice)
 		rawData.TotalPrice = utils.RemoveNonNumeric(rawData.TotalPrice)
-		hang, _ := utils.ParseJSONTime(rawData.HangTime)
-		last, _ := utils.ParseJSONTime(rawData.LastTrade)
+		hang, _ := utils.ParseJSONTime2(rawData.HangTime)
+		last, _ := utils.ParseJSONTime2(rawData.LastTrade)
 		err = copier.Copy(&data, &rawData)
 		if err != nil {
 			continue
@@ -189,22 +190,38 @@ func (m *ManageAdminUserApi) ImportDataFromJson(c *gin.Context) {
 			index3[data.Community] = pairInt{meID: currentID, parentID: index2[secondCategory].meID}
 			currentID++
 		}
+		currentTime, _ := utils.ParseJSONTime(time.Now().Format("2006-01-02"))
 		global.GVA_DB.Transaction(
 			func(tx *gorm.DB) error {
 				if !ok1 {
-					err = tx.Create(&manage.HouseCategory{CategoryId: index1[firstCategory].meID, CategoryLevel: 1, ParentId: 0, CategoryName: firstCategory, CategoryRank: currentID}).Error
+					err = tx.Create(&manage.HouseCategory{CategoryId: index1[firstCategory].meID, CategoryLevel: 1, ParentId: 0, CategoryName: firstCategory,
+						CategoryRank: currentID,
+						CreateTime:   currentTime,
+						UpdateTime:   currentTime,
+					}).Error
 				}
 				if err != nil {
 					return err
 				}
 				if !ok2 {
-					err = tx.Create(&manage.HouseCategory{CategoryId: index2[secondCategory].meID, CategoryLevel: 2, ParentId: index2[secondCategory].parentID, CategoryName: secondCategory, CategoryRank: currentID}).Error
+					err = tx.Create(&manage.HouseCategory{CategoryId: index2[secondCategory].meID,
+						CategoryLevel: 2,
+						ParentId:      index2[secondCategory].parentID,
+						CategoryName:  secondCategory,
+						CategoryRank:  currentID,
+						CreateTime:    currentTime,
+						UpdateTime:    currentTime,
+					}).Error
 				}
 				if err != nil {
 					return err
 				}
 				if !ok3 {
-					err = tx.Create(&manage.HouseCategory{CategoryId: index3[data.Community].meID, CategoryLevel: 3, ParentId: index3[data.Community].parentID, CategoryName: data.Community, CategoryRank: currentID}).Error
+					err = tx.Create(&manage.HouseCategory{CategoryId: index3[data.Community].meID, CategoryLevel: 3, ParentId: index3[data.Community].parentID, CategoryName: data.Community,
+						CategoryRank: currentID,
+						CreateTime:   currentTime,
+						UpdateTime:   currentTime,
+					}).Error
 				}
 				if err != nil {
 					return err

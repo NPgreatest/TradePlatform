@@ -28,3 +28,11 @@ func ParseJSONTime(str string) (common.JSONTime, error) {
 	}
 	return common.JSONTime{Time: t}, nil
 }
+
+func ParseJSONTime2(str string) (common.JSONTime, error) {
+	t, err := time.Parse("2006-01-02 00:00:00", str)
+	if err != nil {
+		return common.JSONTime{}, err
+	}
+	return common.JSONTime{Time: t}, nil
+}
